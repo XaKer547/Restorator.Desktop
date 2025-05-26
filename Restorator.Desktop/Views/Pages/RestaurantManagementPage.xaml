@@ -1,0 +1,104 @@
+﻿<Page x:Class="Restorator.Desktop.Views.Pages.RestaurantManagementPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:infrastructure="clr-namespace:Restorator.Desktop.Infrastructure"
+      xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
+      d:DataContext="{d:DesignInstance Type=viewmodels:RestaurantManagementViewModel}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Margin="20,40">
+        <StackPanel>
+            <WrapPanel Orientation="Horizontal">
+                <ItemsControl>
+                    <ItemsControl.Resources>
+                        <infrastructure:BindingProxy x:Key="ViewModelProxy" Data="{Binding}"/>
+                    </ItemsControl.Resources>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ui:VirtualizingWrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ui:Button Margin="0,25" MinWidth="250">
+                                <ui:Button.Resources>
+                                    <infrastructure:RestaurantPreviewBindingProxy x:Key="model" Data="{Binding}"/>
+                                </ui:Button.Resources>
+
+                                <ui:Button.ContextMenu>
+                                    <ContextMenu Name="menu">
+                                        <MenuItem Header="Редактировать" 
+                                              Command="{Binding Source={StaticResource ViewModelProxy}, Path=Data.OpenRestaurantEditorCommand}"
+                                              CommandParameter="{Binding Source={StaticResource model}, Path=Data}"/>
+
+                                        <MenuItem Header="Бронирования"     
+                                              Command="{Binding Source={StaticResource ViewModelProxy}, Path=Data.OpenRestaurantReservationsCommand}"
+                                              CommandParameter="{Binding Source={StaticResource model}, Path=Data}"/>
+                                    </ContextMenu>
+                                </ui:Button.ContextMenu>
+
+                                <ui:Button.Template>
+                                    <ControlTemplate TargetType="ui:Button" >
+                                        <StackPanel MinWidth="250">
+                                            <Border Height="150" CornerRadius="10" BorderThickness="0.5" BorderBrush="Gray">
+                                                <Border.Background>
+                                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Image, TargetNullValue={StaticResource NoImage}}"/>
+                                                </Border.Background>
+                                            </Border>
+
+                                            <ui:TextBlock Text="{Binding Name}" FontTypography="Subtitle" TextWrapping="Wrap" />
+                                        </StackPanel>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="0.8"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ui:Button.Template>
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <i:ChangePropertyAction TargetName="menu" PropertyName="IsOpen" Value="True"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ui:Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                    <ItemsControl.ItemsSource>
+                        <CompositeCollection>
+                            <CollectionContainer Collection="{Binding Source={StaticResource ViewModelProxy}, Path=Data.RestaurantsPreview}"/>
+
+                            <ui:Button Content="{ui:SymbolIcon Symbol=Add20}" MinWidth="250" Height="150" Margin="0,25,0,50"
+                                       Appearance="Primary" CornerRadius="10" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                       Command="{Binding Source={StaticResource ViewModelProxy}, Path=Data.OpenRestaurantMakerCommand}"/>
+                        </CompositeCollection>
+                    </ItemsControl.ItemsSource>
+                </ItemsControl>
+            </WrapPanel>
+
+            <ui:ProgressRing IsIndeterminate="True" HorizontalAlignment="Center" Visibility="Collapsed" Width="60">
+                <i:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding Searching}" Value="True">
+                        <i:ChangePropertyAction PropertyName="Visibility" Value="Visible"/>
+                    </i:DataTrigger>
+                    <i:DataTrigger Binding="{Binding Searching}" Value="False">
+                        <i:ChangePropertyAction PropertyName="Visibility" Value="Collapsed"/>
+                    </i:DataTrigger>
+                </i:Interaction.Triggers>
+            </ui:ProgressRing>
+        </StackPanel>
+    </Grid>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadOwnedRestaurantsPreviewCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Page>

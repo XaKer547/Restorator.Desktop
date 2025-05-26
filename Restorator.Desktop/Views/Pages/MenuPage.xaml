@@ -1,0 +1,25 @@
+﻿<Page x:Class="Restorator.Desktop.Views.Pages.MenuPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
+      d:DataContext="{d:DesignInstance Type=viewmodels:MenuViewModel}"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800">
+    <ui:NavigationView Name="navigationView" 
+                       PaneTitle="{Binding Username}"
+                       AlwaysShowHeader="False"
+                       IsBackButtonVisible="Collapsed"
+                       MenuItemsSource="{Binding MenuItems}"
+                       FooterMenuItemsSource="{Binding FooterItems}">
+    </ui:NavigationView>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ConfigurePageServiceCommand}" CommandParameter="{Binding ElementName=navigationView}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Page>

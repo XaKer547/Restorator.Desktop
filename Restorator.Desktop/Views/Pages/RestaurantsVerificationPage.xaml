@@ -1,0 +1,97 @@
+﻿<Page x:Class="Restorator.Desktop.Views.Pages.RestaurantsVerificationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:behaviors="clr-namespace:Restorator.Desktop.Behaviors"
+      xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
+      xmlns:pages="clr-namespace:Restorator.Desktop.Views.Pages"
+      d:DataContext="{d:DesignInstance Type=viewmodels:RestaurantsVerificationViewModel}"
+      mc:Ignorable="d"  
+      d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel Margin="20,40">
+        <DockPanel Margin="0,10">
+            <RadioButton Content="Все"
+                 GroupName="verificationFilter"
+                 Style="{StaticResource {x:Type ToggleButton}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:ChangePropertyAction TargetObject="{Binding }" PropertyName="ShowVerified" Value="{x:Null}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+            <RadioButton Content="Подтвержденые" Margin="10, 0"
+                         GroupName="verificationFilter"
+                         Style="{StaticResource {x:Type ToggleButton}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:ChangePropertyAction TargetObject="{Binding }" PropertyName="ShowVerified" Value="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+            <RadioButton Content="Ожидают подтверждения"
+                         GroupName="verificationFilter"
+                         IsChecked="True"
+                         Style="{StaticResource {x:Type ToggleButton}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:ChangePropertyAction TargetObject="{Binding }" PropertyName="ShowVerified" Value="False"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RadioButton>
+        </DockPanel>
+
+        <ui:DynamicScrollViewer>
+            <StackPanel>
+                <ItemsControl ItemsSource="{Binding Previews}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ui:VirtualizingWrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ui:Button MinWidth="250"
+                                       Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:RestaurantsVerificationPage}}, Path=DataContext.OpenRestaurantVerificationCommand}"
+                                       CommandParameter="{Binding }">
+                                <ui:Button.Template>
+                                    <ControlTemplate TargetType="ui:Button">
+                                        <StackPanel>
+                                            <Border Height="150" CornerRadius="10" BorderThickness="0.5" BorderBrush="Gray" >
+                                                <Border.Background>
+                                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Image, TargetNullValue={StaticResource NoImage}}"/>
+                                                </Border.Background>
+                                            </Border>
+
+                                            <ui:TextBlock Text="{Binding Name}" FontTypography="Subtitle" TextWrapping="Wrap" />
+                                            <ContentPresenter/>
+                                        </StackPanel>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Opacity" Value="0.8"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ui:Button.Template>
+                            </ui:Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+
+            <i:Interaction.Behaviors>
+                <behaviors:DynamicScrollViewerLazyLoadBehavior LoadDataCommand="{Binding LoadRestaurantsPreviewCommand}"/>
+            </i:Interaction.Behaviors>
+        </ui:DynamicScrollViewer>
+    </StackPanel>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding InitializeRestaurantsPreviewCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+</Page>

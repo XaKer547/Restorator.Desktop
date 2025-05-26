@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Restorator.Desktop.Controls.SignUpControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
+             xmlns:pages="clr-namespace:Restorator.Desktop.Views.Pages"
+             xmlns:enums="clr-namespace:Restorator.Domain.Models.Enums;assembly=Restorator.Domain"
+             d:DataContext="{d:DesignInstance Type=viewmodels:SignUpViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel>
+        <ui:TextBlock FontTypography="Subtitle" TextAlignment="Center" Text="-- Регистрация --"/>
+
+        <ui:TextBox Text="{Binding Login, Mode=TwoWay}" PlaceholderText="Логин" Margin="0,15"/>
+
+        <ui:TextBox Text="{Binding Email, Mode=TwoWay}" PlaceholderText="Почта" Margin="0,15"/>
+
+        <ui:TextBox Text="{Binding Username, Mode=TwoWay}" PlaceholderText="Как к вам обращаться?" Margin="0,15"/>
+
+        <ui:PasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Пароль" Icon="Password24" Margin="0,15"/>
+
+        <ui:TextBlock Text="Роль"/>
+
+        <StackPanel Orientation="Horizontal">
+            <RadioButton Content="Пользователь" GroupName="roleGroup" IsChecked="True"
+                         Command="{Binding ChangeSelectedRoleCommand}" CommandParameter="{x:Static enums:Roles.User}"/>
+            <RadioButton Content="Менеджер" GroupName="roleGroup" 
+                         Command="{Binding ChangeSelectedRoleCommand}" CommandParameter="{x:Static enums:Roles.Manager}"/>
+        </StackPanel>
+
+        <ui:TextBlock HorizontalAlignment="Right">
+            <Hyperlink Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:AuthenticationPage}}, Path=DataContext.NavigateToSignInPageCommand}"
+                   TextDecorations="None" Foreground="Black">
+                У меня есть аккаунт
+            </Hyperlink>
+        </ui:TextBlock>
+
+        <ui:Button Command="{Binding SignUpCommand}" Content="Создать аккаунт" HorizontalAlignment="Center" Margin="0,15"/>
+    </StackPanel>
+</UserControl>

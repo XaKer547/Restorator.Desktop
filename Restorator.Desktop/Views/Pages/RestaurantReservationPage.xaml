@@ -1,0 +1,133 @@
+﻿<Page  x:Class="Restorator.Desktop.Views.Pages.RestraurantReservationPage"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:controls="clr-namespace:iNKORE.UI.WPF.Modern.Controls;assembly=iNKORE.UI.WPF.Modern.Controls"
+       xmlns:converters="clr-namespace:Restorator.Desktop.Converters"
+       xmlns:models="clr-namespace:Restorator.Desktop.Models"
+       xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
+       xmlns:pages="clr-namespace:Restorator.Desktop.Views.Pages"
+       xmlns:sys="clr-namespace:System;assembly=netstandard"
+       d:DataContext="{d:DesignInstance {x:Type viewmodels:RestaurantReservationViewModel}}"
+       mc:Ignorable="d" 
+       d:DesignHeight="1526.82" d:DesignWidth="1212.66" Margin="0,25" MinWidth="750">
+    <Page.Resources>
+        <converters:DoubleToAngleConverter x:Key="doubleAngeConverter"/>
+        <converters:DateTimeToHoursLimitConverter x:Key="dateTimeToHoursLimitConverter"/>
+        <sys:Int32 x:Key="hourSpace">1</sys:Int32>
+    </Page.Resources>
+
+    <DockPanel>
+        <ui:Button Content="{ui:SymbolIcon ArrowLeft16}" VerticalAlignment="Bottom" CornerRadius="50" Width="50" Height="50" Appearance="Primary" Foreground="White" Margin="25"
+                       Command="{Binding CloseRestaurantReservationCommand}"/>
+
+        <Viewbox HorizontalAlignment="Left">
+            <ItemsControl ItemsSource="{Binding Tables}"
+                           Width="1212.66" Height="1526.82" >
+                <ItemsControl.Background>
+                    <ImageBrush ImageSource="{Binding Plan}"/>
+                </ItemsControl.Background>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="1212.66" Height="1526.82">
+                            <Canvas.Background>
+                                <ImageBrush Stretch="Uniform"/>
+                            </Canvas.Background>
+                        </Canvas>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:TableModel}">
+                        <Button Width="{Binding Width}" Height="{Binding Height}"
+                                    Style="{StaticResource TableButtonStyle}" 
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:RestraurantReservationPage}}, Path=DataContext.TableReservationCommand}"
+                                    CommandParameter="{Binding}"
+                                    IsTabStop="False">
+                            <Button.LayoutTransform>
+                                <RotateTransform CenterX="0" CenterY="0" Angle="{Binding Rotation, Converter={StaticResource doubleAngeConverter}}"/>
+                            </Button.LayoutTransform>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.Resources>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding X}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    </Style>
+                </ItemsControl.Resources>
+            </ItemsControl>
+        </Viewbox>
+
+
+        <StackPanel Margin="20,0">
+            <ui:TextBlock Text="Дата и время" FontTypography="Title"/>
+
+            <StackPanel Margin="25">
+                <ui:TextBlock Text="Дата бронирования"/>
+
+                <ui:CalendarDatePicker Name="calendarPicker" Date="{Binding SelectedDate, Mode=TwoWay}" IsTodayHighlighted="True">
+                    <ui:CalendarDatePicker.Resources>
+                        <Style TargetType="Calendar" BasedOn="{StaticResource DefaultCalendarStyle}">
+                            <Setter Property="DisplayDateStart" Value="{x:Static sys:DateTime.Today}"/>
+                        </Style>
+                    </ui:CalendarDatePicker.Resources>
+                    <DockPanel>
+                        <ui:TextBlock Text="{Binding SelectedDate, StringFormat=m}"/>
+
+                        <ui:TextBlock Text=" (Сегодня)">
+                            <i:Interaction.Triggers>
+                                <i:DataTrigger Binding="{Binding IsToday}" Value="False">
+                                    <i:ChangePropertyAction PropertyName="Visibility" Value="Collapsed"/>
+                                </i:DataTrigger>
+                                <i:DataTrigger Binding="{Binding IsToday}" Value="True">
+                                    <i:ChangePropertyAction PropertyName="Visibility" Value="Visible"/>
+                                </i:DataTrigger>
+                            </i:Interaction.Triggers>
+                        </ui:TextBlock>
+                    </DockPanel>
+                </ui:CalendarDatePicker>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" IsEnabled="{Binding CanSearchReserve}">
+                <DockPanel Margin="0,0,0,25">
+                    <ui:TextBlock Text="С:" Width="75" VerticalAlignment="Center" FontTypography="Title"/>
+
+                    <StackPanel>
+                        <ui:TextBlock Text="{Binding ReservationStartTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"/>
+                        <controls:TimePicker SelectedDateTime="{Binding ReservationStartTime}">
+                            <controls:TimePicker.SourceHours>
+                                <MultiBinding Converter="{StaticResource dateTimeToHoursLimitConverter}" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding Path="BeginWorkTime" />
+                                    <Binding Path="EndWorkTime" />
+                                </MultiBinding>
+                            </controls:TimePicker.SourceHours>
+                        </controls:TimePicker>
+                    </StackPanel>
+                </DockPanel>
+
+                <DockPanel Grid.Column="1">
+                    <ui:TextBlock Text="ДО:" Width="75" VerticalAlignment="Center" FontTypography="Title"/>
+                    <StackPanel>
+                        <ui:TextBlock Text="{Binding ReservationEndTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"/>
+                        <controls:TimePicker SelectedDateTime="{Binding ReservationEndTime}">
+                            <controls:TimePicker.SourceHours>
+                                <MultiBinding Converter="{StaticResource dateTimeToHoursLimitConverter}" ConverterParameter="{StaticResource hourSpace}" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding Path="ReservationStartTime" />
+                                    <Binding Path="EndWorkTime" />
+                                </MultiBinding>
+                            </controls:TimePicker.SourceHours>
+                        </controls:TimePicker>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+
+            <Button Grid.Row="2" Content="Перейти к оформлению" HorizontalAlignment="Center" Margin="0,20" Command="{Binding ConfirmTableReservationCommand}"/>
+        </StackPanel>
+    </DockPanel>
+</Page>
