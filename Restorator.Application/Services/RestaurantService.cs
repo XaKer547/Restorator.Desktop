@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LinqKit;
 using Restorator.Application.Client.Extensions;
 using Restorator.Application.Client.Services.Abstract;
 using Restorator.Domain.Models;
@@ -36,22 +37,13 @@ namespace Restorator.Application.Client.Services
         {
             var ownedRestaurants = await GetFromJsonAsync<IReadOnlyCollection<RestaurantPreviewDTO>>("/owned");
 
-            IReadOnlyCollection<RestaurantPreviewDTO> extendedOwnedPreviews = [.. ownedRestaurants.Select(x =>
+            ownedRestaurants.ForEach(x =>
             {
-                string? image = null;
+                if (x.Image != null)
+                    x.Image = $"{_client.BaseAddress}/restaurants/{x.Name}/{x.Image}";
+            });
 
-                if(x.Image != null)
-                   image = $"{_client.BaseAddress}/restaurants/{x.Name}/{x.Image}";
-
-                return new RestaurantPreviewDTO
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Image = image,
-                };
-            })];
-
-            return extendedOwnedPreviews ?? [];
+            return ownedRestaurants ?? [];
         }
 
         public async Task<Result<RestaurantInfoDTO>> GetRestaurantInfo(int restaurantId)
@@ -122,14 +114,12 @@ namespace Restorator.Application.Client.Services
         {
             var templates = await GetFromJsonAsync<IReadOnlyCollection<RestaurantTemplateDTO>>("/templates");
 
-            IReadOnlyCollection<RestaurantTemplateDTO> extendedTemplates = [.. templates.Select(x => new RestaurantTemplateDTO
+            templates.ForEach(x =>
             {
-                Id = x.Id,
-                Tables = x.Tables,
-                Scheme = $"{_client.BaseAddress}/schemes/{x.Scheme}",
-            })];
+                x.Scheme = $"{_client.BaseAddress}/schemes/{x.Scheme}";
+            });
 
-            return extendedTemplates ?? [];
+            return templates ?? [];
         }
 
         public async Task<Result> UpdateRestaurant(UpdateRestraurantDTO model)
@@ -143,22 +133,13 @@ namespace Restorator.Application.Client.Services
         {
             var latest = await GetFromJsonAsync<IReadOnlyCollection<RestaurantPreviewDTO>>("/latest");
 
-            IReadOnlyCollection<RestaurantPreviewDTO> extendedLatest = [.. latest.Select(x =>
+            latest.ForEach(x =>
             {
-                string? image = null;
-
                 if (x.Image != null)
-                    image = $"{_client.BaseAddress}/restaurants/{x.Name}/{x.Image}";
+                    x.Image = $"{_client.BaseAddress}/restaurants/{x.Name}/{x.Image}";
+            });
 
-                return new RestaurantPreviewDTO
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Image = image,
-                };
-            })];
-
-            return extendedLatest ?? [];
+            return latest ?? [];
         }
 
         public async Task<IReadOnlyCollection<RestaurantSearchItemDTO>> GetOwnedRestaurantsSearchItems()

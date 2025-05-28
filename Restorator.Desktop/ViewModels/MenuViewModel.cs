@@ -96,25 +96,6 @@ namespace Restorator.Desktop.ViewModels
 
         private void InitializeNavigationItems()
         {
-            if (_role == Roles.User)
-            {
-                MenuItems.Add(new NavigationViewItem("Поиск", SymbolRegular.Search16, typeof(RestaurantSearchPage)));
-                MenuItems.Add(new NavigationViewItem("Бронирования", SymbolRegular.BookOpen16, typeof(UserReservationsPage)));
-            }
-
-            if (_role == Roles.Manager)
-            {
-                MenuItems.Add(new NavigationViewItem("Управление", SymbolRegular.FolderPeople20, typeof(RestaurantManagementPage)));
-                MenuItems.Add(new NavigationViewItem("Статистика", SymbolRegular.Diagram20, typeof(RestraurantsReportPage)));
-
-            }
-
-            if (_role == Roles.Admin)
-            {
-                MenuItems.Add(new NavigationViewItem("Заявки", SymbolRegular.TaskListRtl20, typeof(RestaurantsVerificationPage)));
-                MenuItems.Add(new NavigationViewItem("Редактор схем", SymbolRegular.TaskListRtl20, typeof(RestaurantTemplateGeneratorPage)));
-            }
-
             if (_role is null)
             {
                 MenuItems.Add(new NavigationViewItem("Поиск", SymbolRegular.Search16, typeof(RestaurantSearchPage)));
@@ -125,16 +106,34 @@ namespace Restorator.Desktop.ViewModels
                     Content = "Войти",
                     Command = LoginCommand
                 });
+
+                return;
             }
-            else
+
+            if (_role == Roles.User)
             {
-                FooterItems.Add(new NavigationViewItem
-                {
-                    Icon = new SymbolIcon(SymbolRegular.DoorArrowLeft16),
-                    Content = "Выйти",
-                    Command = LogoutCommand
-                });
+                MenuItems.Add(new NavigationViewItem("Поиск", SymbolRegular.Search16, typeof(RestaurantSearchPage)));
+                MenuItems.Add(new NavigationViewItem("Бронирования", SymbolRegular.BookOpen16, typeof(UserReservationsPage)));
             }
+
+            if (_role == Roles.Manager)
+            {
+                MenuItems.Add(new NavigationViewItem("Управление", SymbolRegular.FolderPeople20, typeof(RestaurantManagementPage)));
+                MenuItems.Add(new NavigationViewItem("Статистика", SymbolRegular.Diagram20, typeof(RestraurantsReportPage)));
+            }
+
+            if (_role == Roles.Admin)
+            {
+                MenuItems.Add(new NavigationViewItem("Заявки", SymbolRegular.TaskListRtl20, typeof(RestaurantsVerificationPage)));
+                MenuItems.Add(new NavigationViewItem("Редактор схем", SymbolRegular.TaskListRtl20, typeof(RestaurantTemplateGeneratorPage)));
+            }
+
+            FooterItems.Add(new NavigationViewItem
+            {
+                Icon = new SymbolIcon(SymbolRegular.DoorArrowLeft16),
+                Content = "Выйти",
+                Command = LogoutCommand
+            });
         }
 
         [RelayCommand]

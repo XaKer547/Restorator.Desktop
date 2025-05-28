@@ -49,7 +49,7 @@ namespace Restorator.Desktop.ViewModels
 
             Approved = info.Approved;
 
-            foreach (var image in Images)
+            foreach (var image in info.Images)
                 Images.Add(image);
 
             SelectedImage = Images.FirstOrDefault();

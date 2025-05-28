@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LinqKit;
 using Restorator.Application.Client.Extensions;
 using Restorator.Application.Client.Services.Abstract;
 using Restorator.Domain.Models.Templates;
@@ -35,6 +36,11 @@ namespace Restorator.Application.Client.Services
         public async Task<IReadOnlyCollection<RestaurantTemplatePreview>> GetRestaurantsTemplatePreview()
         {
             var templatePreviews = await GetFromJsonAsync<IReadOnlyCollection<RestaurantTemplatePreview>>("/restaurant");
+
+            templatePreviews.ForEach(x =>
+            {
+                x.Image = $"{_client.BaseAddress}/schemes/{x.Image}";
+            });
 
             return templatePreviews ?? [];
         }

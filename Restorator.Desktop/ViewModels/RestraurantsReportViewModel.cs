@@ -83,6 +83,9 @@ namespace Restorator.Desktop.ViewModels
         private MonthSummaryReportDTO monthReport;
 
         [ObservableProperty]
+        private bool hasReport;
+
+        [ObservableProperty]
         private IReadOnlyCollection<RestaurantSearchItemDTO> restaurants;
 
         [ObservableProperty]
@@ -167,6 +170,8 @@ namespace Restorator.Desktop.ViewModels
         public async Task LoadMonthStatistics()
         {
             MonthReport = await _reportService.GetMonthSummaryReport(SelectedDate, selectedRestaurantId);
+            
+            HasReport = !MonthReport.IsEmpty;
 
             if (MonthReport.IsEmpty)
                 return;

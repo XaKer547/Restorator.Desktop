@@ -7,7 +7,7 @@
                  xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
                  d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
                  mc:Ignorable="d"
-                 Title="Ресторатор" MinHeight="450" MinWidth="800" WindowCornerPreference="Round">
+                 Title="Ресторатор" MinHeight="600" MinWidth="1100" WindowCornerPreference="Round">
     <Grid>
         <ui:TitleBar Height="25"/>
         <Frame Name="RootNavigation" NavigationUIVisibility="Hidden"/>
