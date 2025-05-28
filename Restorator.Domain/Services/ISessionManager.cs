@@ -9,10 +9,11 @@ namespace Restorator.Domain.Services
         bool TryGetSession(out SessionInfo sessionInfo);
         bool TryGetToken(out string token);
         void SetSession(SessionInfo sessionInfo, string token);
+        void SetSessionWithoutNotify(SessionInfo sessionInfo, string token);
         bool HaveSession();
         void RemoveSession();
 
-        public static event UserLoggedInHandler? UserLoggedIn;
-        public static event UserLoggedOutHandler? UserLoggedOut;
+        public event UserLoggedInHandler? UserLoggedIn;
+        public event UserLoggedOutHandler? UserLoggedOut;
     }
 }

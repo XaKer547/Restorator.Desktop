@@ -52,7 +52,7 @@ namespace Restorator.Desktop.Extensions
         {
             Action<IServiceProvider, HttpClient> configureClient = (provider, client) =>
             {
-                client.BaseAddress = new Uri($"https://localhost:7090");
+                client.BaseAddress = new Uri($"https://localhost:4035");
 
                 var manager = provider.GetRequiredService<ISessionManager>();
 

@@ -20,22 +20,29 @@
             </Grid.Background>
         </Grid>
 
-        <Viewbox Grid.Column="1" HorizontalAlignment="Center" Margin="0,25">
-            <StackPanel>
-                <DockPanel HorizontalAlignment="Center">
-                    <ui:SymbolIcon Symbol="Mic32" FontSize="38"/>
-                    <ui:TextBlock FontTypography="Title" Text="Ресторатор" />
-                </DockPanel>
-                <ui:TextBlock FontTypography="Body" TextAlignment="Center" Text="Поиск доступных ресторанов" />
 
-                <ContentControl Content="{Binding CurrentViewModel}" Margin="0,20,0,0"/>
+        <Viewbox Grid.Column="1" VerticalAlignment="Center" Margin="25">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <DockPanel HorizontalAlignment="Center">
+                        <ui:SymbolIcon Symbol="Mic32" FontSize="38"/>
+                        <ui:TextBlock FontTypography="Title" Text="Ресторатор" />
+                    </DockPanel>
+                    <ui:TextBlock FontTypography="Body" TextAlignment="Center" Text="Поиск доступных ресторанов" />
 
-                <ui:TextBlock HorizontalAlignment="Right">
+                    <ContentControl Content="{Binding CurrentViewModel}" Margin="0,20,0,0"/>
+                </StackPanel>
+
+                <ui:TextBlock Grid.Row="1" HorizontalAlignment="Right">
                     <Hyperlink TextDecorations="None" Foreground="Black" Command="{Binding NavigateBackCommand}">
                         Назад
                     </Hyperlink>
                 </ui:TextBlock>
-            </StackPanel>
+            </Grid>
         </Viewbox>
     </Grid>
 </Page>

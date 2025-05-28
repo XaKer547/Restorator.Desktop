@@ -35,6 +35,10 @@ namespace Restorator.Desktop.ViewModels
         [ObservableProperty]
         private string newPassword;
 
+        [ObservableProperty]
+        private bool passwordUpdated = false;
+
+
         [RelayCommand]
         public void ResetViewModelState()
         {
@@ -94,6 +98,8 @@ namespace Restorator.Desktop.ViewModels
 
                 return;
             }
+
+            PasswordUpdated = true;
 
             _snackbarService.Show("С возвращением", "Мы рады видеть тебя снова", Wpf.Ui.Controls.ControlAppearance.Success);
         }

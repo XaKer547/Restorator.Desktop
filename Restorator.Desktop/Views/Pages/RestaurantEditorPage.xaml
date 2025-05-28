@@ -13,7 +13,6 @@
       d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="0,25,0,0">
         <ui:PassiveScrollViewer >
-
             <StackPanel Margin="20">
                 <StackPanel>
                     <Viewbox>
@@ -27,9 +26,9 @@
                                     <ui:TextBlock Text="{Binding RestaurantName}" FontTypography="Body" Foreground="White" VerticalAlignment="Bottom"/>
 
                                     <ListBox ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage, Mode=TwoWay}" 
-                       IsSynchronizedWithCurrentItem="True"
-                       HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25"
-                       Background="Transparent">
+                                             IsSynchronizedWithCurrentItem="True"
+                                             HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25"
+                                             Background="Transparent">
                                         <ListBox.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"/>

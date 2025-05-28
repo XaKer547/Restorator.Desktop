@@ -1,10 +1,11 @@
 ﻿using Restorator.Domain.Models.Enums;
 
-namespace Restorator.Domain.Models.Restaurant
+namespace Restorator.Domain.Models.Reservations
 {
-    public class TableDTO
+    public class ReservationTableDTO
     {
         public int Id { get; set; }
+        public int? ReservationId { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
 

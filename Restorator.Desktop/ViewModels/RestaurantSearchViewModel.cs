@@ -22,15 +22,12 @@ namespace Restorator.Desktop.ViewModels
 
             IsLoggedIn = sessionManager.HaveSession();
 
-            ISessionManager.UserLoggedIn += UserLoggedIn;
-            ISessionManager.UserLoggedOut += userLoggedOut;
+            sessionManager.UserLoggedIn += UserLoggedIn;
+            sessionManager.UserLoggedOut += UserLoggedOut;
         }
 
-        private void UserLoggedIn()
-        {
-            IsLoggedIn = true;
-        }
-        private void userLoggedOut() => IsLoggedIn = false;
+        private void UserLoggedIn() => IsLoggedIn = true;
+        private void UserLoggedOut() => IsLoggedIn = false;
 
 
         [ObservableProperty]

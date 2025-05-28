@@ -94,8 +94,6 @@ namespace Restorator.Desktop.ViewModels
 
             var session = signInResult.Value;
 
-            //get session info?
-            //var result = session
             Role = Enum.Parse<Roles>(session.SessionInfo.Role);
 
             _snackbarService.Show("Добро пожаловать в семью", "Let's celebrate and eat some chick", Wpf.Ui.Controls.ControlAppearance.Success);

@@ -8,6 +8,9 @@ namespace Restorator.Desktop.Models
         public int Id { get; set; }
 
         [ObservableProperty]
+        private int? reservationId;
+
+        [ObservableProperty]
         private TableStates state;
 
         [ObservableProperty]

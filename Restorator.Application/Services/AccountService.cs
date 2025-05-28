@@ -71,7 +71,7 @@ namespace Restorator.Application.Client.Services
 
             _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", result.Token);
 
-            _sessionManager.SetSession(result.SessionInfo, result.Token);
+            _sessionManager.SetSessionWithoutNotify(result.SessionInfo, result.Token);
 
             return result;
         }

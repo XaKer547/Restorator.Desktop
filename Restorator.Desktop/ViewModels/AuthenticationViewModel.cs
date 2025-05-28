@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Restorator.Desktop.ViewModels.Abstract;
 using Restorator.Domain.Services;
+using System.Threading.Tasks;
 
 namespace Restorator.Desktop.ViewModels
 {
@@ -14,7 +15,8 @@ namespace Restorator.Desktop.ViewModels
         public AuthenticationViewModel(Services.INavigationService navigationService,
                                        SignInViewModel signInViewModel,
                                        SignUpViewModel signUpViewModel,
-                                       AccountRestoreViewModel accountRestoreViewModel)
+                                       AccountRestoreViewModel accountRestoreViewModel,
+                                       ISessionManager sessionManager)
         {
             _navigationService = navigationService;
             _signInViewModel = signInViewModel;
@@ -24,9 +26,8 @@ namespace Restorator.Desktop.ViewModels
 
             _accountRestoreViewModel = accountRestoreViewModel;
 
-            ISessionManager.UserLoggedIn += UserSingedIn;
-
-            ISessionManager.UserLoggedOut += UserLoggedOut;
+            sessionManager.UserLoggedIn += UserSignedIn;
+            sessionManager.UserLoggedOut += UserLoggedOut;
         }
 
         private void UserLoggedOut()
@@ -43,9 +44,11 @@ namespace Restorator.Desktop.ViewModels
         [ObservableProperty]
         private IRelayCommand navigateBackCommand;
 
-        private void UserSingedIn()
+        private async void UserSignedIn()
         {
             Authenticated = true;
+
+            await NavigateToMenu();
         }
 
         [RelayCommand]
@@ -69,17 +72,16 @@ namespace Restorator.Desktop.ViewModels
             NavigateBackCommand = NavigateToSignInPageCommand;
         }
 
-
-        async partial void OnAuthenticatedChanged(bool value)
+        partial void OnAuthenticatedChanged(bool value)
         {
-            await NavigateToMenu();
+            if (!Authenticated)
+                _navigationService.ResetNavigation();
         }
-
 
         [RelayCommand]
         public async Task NavigateToMenu()
         {
-            if (Authenticated && CurrentViewModel.Role == Domain.Models.Enums.Roles.User)
+            if (CurrentViewModel.Role == Domain.Models.Enums.Roles.User)
                 await _navigationService.NavigateBackAsync();
             else
                 await _navigationService.NavigateAsync<MenuViewModel>();

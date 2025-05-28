@@ -41,7 +41,10 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="OccupiedByOther">
                                     <Setter TargetName="MainPart" Property="Fill" Value="Red" />
-                                    <Setter Property="IsEnabled" Value="False" />
+                                    <!--<Setter Property="IsEnabled" Value="False" />-->
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="PendingReservation">
+                                    <Setter TargetName="MainPart" Property="Fill" Value="Yellow" />
                                 </DataTrigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

@@ -4,6 +4,7 @@
     {
         Avaible,
         OccupiedByUser,
-        OccupiedByOther
+        OccupiedByOther,
+        PendingReservation,
     }
 }

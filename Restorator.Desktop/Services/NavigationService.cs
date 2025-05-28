@@ -7,6 +7,8 @@ namespace Restorator.Desktop.Services
     public interface INavigationService
     {
         void SetNavigationControl(Frame frame);
+        void SetNavigationRoot<T>() where T : ViewModelBase;
+        void ResetNavigation();
 
         void Navigate<T>() where T : ViewModelBase;
         void Navigate<T>(Action<T> action) where T : ViewModelBase;
@@ -29,6 +31,7 @@ namespace Restorator.Desktop.Services
         private readonly Stack<ViewModelBase> _hierarchy = new();
 
         private ViewModelBase _currentViewModel;
+        private ViewModelBase _rootViewModel;
 
         public NavigationService(IServiceProvider serviceProvider)
         {
@@ -38,7 +41,6 @@ namespace Restorator.Desktop.Services
         {
             _navigationControl = navigationControl;
         }
-
         public void Navigate<T>() where T : ViewModelBase
         {
             _currentViewModel = _serviceProvider.GetRequiredService<T>();
@@ -138,6 +140,18 @@ namespace Restorator.Desktop.Services
             _navigationControl.Navigate(_currentViewModel);
 
             return Task.CompletedTask;
+        }
+
+        public void SetNavigationRoot<T>() where T : ViewModelBase
+        {
+            _rootViewModel = _serviceProvider.GetRequiredService<T>();
+        }
+
+        public void ResetNavigation()
+        {
+            _hierarchy.Clear();
+
+            _hierarchy.Push(_rootViewModel);
         }
     }
 }

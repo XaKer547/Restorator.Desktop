@@ -168,6 +168,9 @@ namespace Restorator.Desktop.ViewModels
         {
             MonthReport = await _reportService.GetMonthSummaryReport(SelectedDate, selectedRestaurantId);
 
+            if (MonthReport.IsEmpty)
+                return;
+
             CalculateCanceledPercent();
 
             FillRestraurantSplitSeries();

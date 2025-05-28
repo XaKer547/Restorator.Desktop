@@ -8,8 +8,8 @@ namespace Restorator.Desktop.Session
     {
         private readonly Settings _settings = Settings.Default;
 
-        public static event UserLoggedInHandler? UserLoggedIn;
-        public static event UserLoggedOutHandler? UserLoggedOut;
+        public event UserLoggedInHandler? UserLoggedIn;
+        public event UserLoggedOutHandler? UserLoggedOut;
         public bool TryGetSession(out SessionInfo sessionInfo)
         {
             if (!HaveSession())
@@ -24,26 +24,23 @@ namespace Restorator.Desktop.Session
         }
         public void RemoveSession()
         {
-            _settings.Reset();
-
-            _settings.Save();
+            RemoveSessionRaw();
 
             UserLoggedOut?.Invoke();
         }
         public void SetSession(SessionInfo sessionInfo, string token)
         {
-            RemoveSession();
+            RemoveSessionRaw();
 
-            _settings.Token = token;
-
-            _settings.Role = sessionInfo.Role;
-
-            _settings.Username = sessionInfo.Username;
-
-            _settings.Save();
+            SetSessionRaw(sessionInfo, token);
 
             UserLoggedIn?.Invoke();
         }
+        public void SetSessionWithoutNotify(SessionInfo sessionInfo, string token)
+        {
+            SetSessionRaw(sessionInfo, token);
+        }
+
         public bool HaveSession() => _settings.Token != string.Empty;
         public bool TryGetToken(out string token)
         {
@@ -57,6 +54,23 @@ namespace Restorator.Desktop.Session
             token = null;
 
             return false;
+        }
+
+        private void RemoveSessionRaw()
+        {
+            _settings.Reset();
+
+            _settings.Save();
+        }
+        private void SetSessionRaw(SessionInfo sessionInfo, string token)
+        {
+            _settings.Token = token;
+
+            _settings.Role = sessionInfo.Role;
+
+            _settings.Username = sessionInfo.Username;
+
+            _settings.Save();
         }
     }
 }

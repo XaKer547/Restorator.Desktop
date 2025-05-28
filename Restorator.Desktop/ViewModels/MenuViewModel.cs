@@ -43,9 +43,7 @@ namespace Restorator.Desktop.ViewModels
             _contentDialogService = contentDialogService;
             _menuNavigationService = menuNavigationService;
 
-            ISessionManager.UserLoggedIn += RefreshMenuState;
-
-            ISessionManager.UserLoggedOut += RefreshMenuState;
+            sessionManager.UserLoggedIn += RefreshMenuState;
         }
 
 

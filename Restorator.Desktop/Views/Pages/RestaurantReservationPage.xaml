@@ -17,6 +17,7 @@
     <Page.Resources>
         <converters:DoubleToAngleConverter x:Key="doubleAngeConverter"/>
         <converters:DateTimeToHoursLimitConverter x:Key="dateTimeToHoursLimitConverter"/>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
         <sys:Int32 x:Key="hourSpace">1</sys:Int32>
     </Page.Resources>
 
@@ -45,7 +46,7 @@
                     <DataTemplate DataType="{x:Type models:TableModel}">
                         <Button Width="{Binding Width}" Height="{Binding Height}"
                                     Style="{StaticResource TableButtonStyle}" 
-                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:RestraurantReservationPage}}, Path=DataContext.TableReservationCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:RestraurantReservationPage}}, Path=DataContext.GetTableReservationInfoCommand}"
                                     CommandParameter="{Binding}"
                                     IsTabStop="False">
                             <Button.LayoutTransform>
@@ -128,6 +129,37 @@
             </StackPanel>
 
             <Button Grid.Row="2" Content="Перейти к оформлению" HorizontalAlignment="Center" Margin="0,20" Command="{Binding ConfirmTableReservationCommand}"/>
+
+
+
+            <Border BorderBrush="Blue" BorderThickness="0.5" CornerRadius="15"
+                    Margin="20,0"
+                    Visibility="{Binding ReservationInfoShow, Converter={StaticResource booleanToVisibilityConverter}}">
+                <GroupBox HorizontalAlignment="Center">
+                    <GroupBox.Header>
+                        <ui:TextBlock Text="Сведения о бронировании" FontTypography="Title"
+                                      HorizontalAlignment="Center"/>
+                    </GroupBox.Header>
+
+                    <StackPanel>
+                        <StackPanel HorizontalAlignment="Center">
+                            <ui:TextBlock Text="Время бронирования" FontTypography="Subtitle" HorizontalAlignment="Center"/>
+
+                            <DockPanel>
+                                <ui:TextBlock Text="{Binding ReservationInfo.ReservationStart}" FontTypography="Subtitle" FontWeight="Normal"/>
+                                <ui:TextBlock Text=" - " FontTypography="Subtitle" FontWeight="Normal"/>
+                                <ui:TextBlock Text="{Binding ReservationInfo.ReservationEnd}" FontTypography="Subtitle" FontWeight="Normal"/>
+                            </DockPanel>
+                        </StackPanel>
+
+                        <DockPanel Margin="0,10">
+                            <ui:TextBlock Text="Владелец брониррования: " FontTypography="Subtitle"/>
+                            <ui:TextBlock Text="{Binding ReservationInfo.Username}" FontTypography="Subtitle" FontWeight="Normal"/>
+                        </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            </Border>
         </StackPanel>
     </DockPanel>
 </Page>

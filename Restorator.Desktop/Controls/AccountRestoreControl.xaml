@@ -6,6 +6,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
+             xmlns:pages="clr-namespace:Restorator.Desktop.Views.Pages"
              d:DataContext="{d:DesignInstance Type=viewmodels:AccountRestoreViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -68,5 +69,8 @@
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding ResetViewModelStateCommand}"/>
         </i:EventTrigger>
+        <i:DataTrigger Binding="{Binding PasswordUpdated}" Value="True">
+            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:AuthenticationPage}}, Path=DataContext.NavigateToMenuCommand}"/>
+        </i:DataTrigger>
     </i:Interaction.Triggers>
 </UserControl>

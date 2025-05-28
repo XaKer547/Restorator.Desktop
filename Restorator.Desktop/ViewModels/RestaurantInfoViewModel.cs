@@ -87,7 +87,7 @@ namespace Restorator.Desktop.ViewModels
             if (!_sessionManager.HaveSession())
                 await _navigationService.NavigateWithHierarchyAsync<AuthenticationViewModel>();
 
-            await _navigationService.NavigateWithHierarchyAsync<RestaurantReservationViewModel>(viewModel => viewModel.LoadRestaurantPlan(_restaurantId));
+            await _navigationService.NavigateWithHierarchyAsync<RestaurantReservationViewModel>(viewModel => viewModel.LoadRestaurantPlan(_restaurantId, BeginWorkTime, EndWorkTime));
         }
 
         [RelayCommand]
