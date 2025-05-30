@@ -43,16 +43,16 @@ namespace Restorator.Desktop.ViewModels
                 return;
             }
 
-            await _restaurantService.CreateRestaurant(new CreateRestaurantDTO
+            var result = await _restaurantService.CreateRestaurant(new CreateRestaurantDTO
             {
                 Name = RestaurantName,
                 BeginWorkTime = TimeOnly.FromDateTime(BeginWorkTime),
                 EndWorkTime = TimeOnly.FromDateTime(EndWorkTime),
                 Description = Description,
-                //Images = Images, TODO
-                //Menu = Menu,
+                Images = await GetImagesBytes(),
+                Menu = await GetMenuBytes(),
                 Tags = RestaurantTags.Select(r => r.Id),
-                TemplateId = SelectedTemplate.Id
+                TemplateId = SelectedTemplate.Id,
             });
         }
 

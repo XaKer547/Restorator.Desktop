@@ -7,6 +7,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:sdl="http://schemas.sdl.com/xaml"
       xmlns:controls="clr-namespace:iNKORE.UI.WPF.Modern.Controls;assembly=iNKORE.UI.WPF.Modern.Controls"
+      xmlns:infrastructure="clr-namespace:Restorator.Desktop.Infrastructure"
       xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
       d:DataContext="{d:DesignInstance Type=viewmodels:EditRestaurantViewModel}"
       mc:Ignorable="d" 
@@ -15,59 +16,118 @@
         <ui:PassiveScrollViewer >
             <StackPanel Margin="20">
                 <StackPanel>
-                    <Viewbox>
-                        <Border Width="300" Height="75" CornerRadius="10" Background="Black" >
-                            <Border CornerRadius="10">
-                                <Border.Background>
-                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding SelectedImage, TargetNullValue={StaticResource NoImage}}" Opacity="0.75"/>
-                                </Border.Background>
+                    <Grid>
+                        <Viewbox>
+                            <Border Width="300" Height="75" CornerRadius="10" Background="Black" >
+                                <Border CornerRadius="10">
+                                    <Border.Background>
+                                        <ImageBrush Stretch="UniformToFill" ImageSource="{Binding SelectedImage.Source, TargetNullValue={StaticResource NoImage}}" Opacity="0.75"/>
+                                    </Border.Background>
 
-                                <Grid Margin="2.5,0">
-                                    <ui:TextBlock Text="{Binding RestaurantName}"
-                                FontTypography="Body" Foreground="White"
-                                VerticalAlignment="Bottom"/>
+                                    <Grid Margin="2.5,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <ListBox ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage, Mode=TwoWay}" 
-                           IsSynchronizedWithCurrentItem="True"
-                           HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25"
-                           Background="Transparent" IsTabStop="False">
-                                        <ListBox.ItemsPanel>
+                                        <ui:TextBlock Text="{Binding RestaurantName}"
+                                                      FontTypography="Body" Foreground="White"
+                                                      VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </Viewbox>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <ui:PassiveScrollViewer Grid.Column="1" VerticalAlignment="Bottom" Height="100" HorizontalAlignment="Right" 
+                                                    VerticalScrollBarVisibility="Hidden"
+                                                    HorizontalScrollBarVisibility="Auto"
+                                                    Margin="30,2">
+
+                                <Viewbox>
+                                    <ItemsControl>
+                                        <ItemsControl.Resources>
+                                            <infrastructure:BindingProxy x:Key="ViewModelProxy" Data="{Binding }"/>
+                                        </ItemsControl.Resources>
+                                        <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="2"/>
+                                                <StackPanel Orientation="Horizontal"/>
                                             </ItemsPanelTemplate>
-                                        </ListBox.ItemsPanel>
-                                        <ListBox.Resources>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="ListBoxItem">
-                                                            <Border Name="mainBorder" Width="20" Height="10" CornerRadius="5"
-                                                  BorderBrush="Transparent" BorderThickness="0.25" Opacity="0.5">
-                                                                <Border Name="imageContainer" CornerRadius="5">
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <ui:Button IsTabStop="False" Padding="0" HorizontalAlignment="Right">
+                                                    <ui:Button.Resources>
+                                                        <infrastructure:RestaurantImageBindingProxy x:Key="model" Data="{Binding }"/>
+                                                    </ui:Button.Resources>
+
+                                                    <ui:Button.ContextMenu>
+                                                        <ContextMenu Name="menu">
+                                                            <MenuItem Header="Заменить" 
+                                                                              Command="{Binding Source={StaticResource ViewModelProxy}, Path=Data.ReplaceRestaurantImageCommand}"
+                                                                              CommandParameter="{Binding Source={StaticResource model}, Path=Data}"/>
+
+                                                            <MenuItem Header="Удалить"     
+                                                                              Command="{Binding Source={StaticResource ViewModelProxy}, Path=Data.DeleteRestaurantImageCommand}"
+                                                                              CommandParameter="{Binding Source={StaticResource model}, Path=Data}"/>
+                                                        </ContextMenu>
+                                                    </ui:Button.ContextMenu>
+
+                                                    <ui:Button.Template>
+                                                        <ControlTemplate TargetType="ui:Button">
+                                                            <StackPanel Margin="2.5">
+                                                                <Border Width="100" Height="50" CornerRadius="25" BorderThickness="0.5" BorderBrush="LightBlue">
                                                                     <Border.Background>
-                                                                        <ImageBrush Stretch="UniformToFill" ImageSource="{Binding }" />
+                                                                        <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Source, TargetNullValue={StaticResource NoImage}}"/>
                                                                     </Border.Background>
                                                                 </Border>
-                                                            </Border>
+                                                            </StackPanel>
+
                                                             <ControlTemplate.Triggers>
                                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter TargetName="mainBorder" Property="Opacity" Value="1" />
-                                                                </Trigger>
-                                                                <Trigger Property="IsSelected" Value="True">
-                                                                    <Setter TargetName="mainBorder" Property="Opacity" Value="1" />
-                                                                    <Setter TargetName="mainBorder" Property="BorderBrush" Value="LightBlue"/>
+                                                                    <Setter Property="Opacity" Value="0.8"/>
                                                                 </Trigger>
                                                             </ControlTemplate.Triggers>
                                                         </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </ListBox.Resources>
-                                    </ListBox>
-                                </Grid>
-                            </Border>
-                        </Border>
-                    </Viewbox>
+                                                    </ui:Button.Template>
+
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="MouseRightButtonDown">
+                                                            <i:ChangePropertyAction TargetName="menu" PropertyName="IsOpen" Value="True"/>
+                                                        </i:EventTrigger>
+
+                                                        <i:EventTrigger EventName="Click">
+                                                            <i:InvokeCommandAction Command="{Binding Source={StaticResource ViewModelProxy}, Path=Data.SetSelectedImageCommand}"
+                                                                                       CommandParameter="{Binding Source={StaticResource model}, Path=Data }"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </ui:Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+
+                                        <ItemsControl.ItemsSource>
+                                            <CompositeCollection>
+                                                <CollectionContainer Collection="{Binding Source={StaticResource ViewModelProxy}, Path=Data.Images}"/>
+
+                                                <ui:Button Content="{ui:SymbolIcon Symbol=Add20}" Width="100" Height="50" CornerRadius="25" Padding="0"
+                                                               Appearance="Primary" FontSize="20" Margin="2.5"
+                                                               Command="{Binding AddRestaurantImageCommand}"/>
+                                            </CompositeCollection>
+                                        </ItemsControl.ItemsSource>
+                                    </ItemsControl>
+                                </Viewbox>
+
+                            </ui:PassiveScrollViewer>
+
+                        </Grid>
+
+                    </Grid>
+
 
                     <StackPanel Orientation="Horizontal">
                         <ui:TextBlock FontTypography="Subtitle" Text="Статус ресторана: "/>
@@ -129,7 +189,7 @@
                     <ui:TextBlock Text="Меню" FontTypography="Title" Margin="0,15"/>
 
                     <ui:Button Command="{Binding LoadRestaurantMenuImageCommand}">
-                        <ui:Image Source="{Binding Menu, TargetNullValue={StaticResource NoImage}}" Width="100" HorizontalAlignment="Left"/>
+                        <ui:Image Source="{Binding Menu.Source, TargetNullValue={StaticResource NoImage}}" Width="100" HorizontalAlignment="Left"/>
                     </ui:Button>
                 </StackPanel>
             </StackPanel>

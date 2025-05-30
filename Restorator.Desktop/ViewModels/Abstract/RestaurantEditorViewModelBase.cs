@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using Restorator.Desktop.Models;
 using Restorator.Desktop.ViewModels.Abstract;
 using Restorator.Domain.Models.Restaurant;
 using Restorator.Domain.Services;
@@ -41,13 +42,13 @@ namespace Restorator.Desktop.ViewModels
         private bool approved;
 
         [ObservableProperty]
-        private string? selectedImage;
+        private RestaurantImageDTO? selectedImage;
 
         [ObservableProperty]
-        private ObservableCollection<string> images = [];
+        private ObservableCollection<RestaurantImageDTO> images = [];
 
         [ObservableProperty]
-        private string? menu;
+        private RestaurantImageDTO? menu;
 
         [ObservableProperty]
         private DateTime beginWorkTime;
@@ -62,6 +63,13 @@ namespace Restorator.Desktop.ViewModels
         [ObservableProperty]
         private ObservableCollection<RestaurantTagDTO> tags = [];
 
+
+        [RelayCommand]
+        public void SetSelectedImage(RestaurantImageDTO image)
+        {
+            SelectedImage = image;
+        }
+
         [RelayCommand]
         public async Task LoadRestaurantTags()
         {
@@ -71,38 +79,113 @@ namespace Restorator.Desktop.ViewModels
         }
 
         [RelayCommand]
-        public void LoadRestaurantImage()
+        public void AddRestaurantImage()
         {
-            var dialog = new OpenFileDialog()
+            if (!TryLoadImage(out var image))
             {
-                Multiselect = true,
-                Filter = "Изображения|*.jpg;*.jpeg;*.png;"
-            };
-
-            if (dialog.ShowDialog() != true)
                 return;
-
-            foreach (var fileName in dialog.FileNames)
-            {
-                //Images.Add(File.ReadAllBytes(fileName));
             }
+
+            Images.Add(image);
+
+            SelectedImage ??= image;
+        }
+
+
+        [RelayCommand]
+        public void DeleteRestaurantImage(RestaurantImageDTO image)
+        {
+            Images.Remove(image);
+
+            if (SelectedImage == image)
+                SelectedImage = Images.FirstOrDefault();
+        }
+
+
+        [RelayCommand]
+        public void ReplaceRestaurantImage(RestaurantImageDTO image)
+        {
+            if (!TryLoadImage(out var newImage))
+            {
+                return;
+            }
+
+            image.Source = newImage.Source;
+            image.IsLocal = true;
         }
 
         [RelayCommand]
         public void LoadRestaurantMenuImage()
         {
-            var dialog = new OpenFileDialog()
-            {
-                Filter = "Изображения|*.jpg;*.jpeg;*.png;"
-            };
-
-            if (dialog.ShowDialog() != true)
+            if (!TryLoadImage(out var newMenu))
                 return;
 
-            //Menu = File.ReadAllBytes(dialog.FileName);
+            Menu = newMenu;
+        }
+
+        [RelayCommand]
+        public void DeleteRestaurantMenuImage()
+        {
+            Menu = null;
         }
 
         [RelayCommand]
         public async Task CloseRestaurantEditor() => await _navigationService.NavigateBackAsync();
+
+        private bool TryLoadImage(out RestaurantImageDTO image)
+        {
+            image = null;
+
+            var dialog = new OpenFileDialog()
+            {
+                Multiselect = false,
+                Filter = "Изображения|*.jpg;*.jpeg;*.png;"
+            };
+
+            if (dialog.ShowDialog() != true)
+                return false;
+
+            image = new RestaurantImageDTO()
+            {
+                IsLocal = true,
+                Source = dialog.FileName
+            };
+
+            return true;
+        }
+
+        private Task<byte[]> PrepareImage(RestaurantImageDTO image)
+        {
+            if (image.IsLocal)
+                return File.ReadAllBytesAsync(image.Source);
+
+            return _restaurantService.GetImage(image.Source);
+        }
+
+        protected async Task<IEnumerable<byte[]>?> GetImagesBytes()
+        {
+            if (Images.Count == 0)
+                return null;
+
+            var imagesList = new List<byte[]>();
+
+            foreach (var image in Images)
+            {
+                var bytes = await PrepareImage(image);
+
+                imagesList.Add(bytes);
+            }
+
+            return imagesList;
+        }
+
+
+        protected Task<byte[]?> GetMenuBytes()
+        {
+            if (Menu is null)
+                return null;
+
+            return PrepareImage(Menu)!;
+        }
     }
 }

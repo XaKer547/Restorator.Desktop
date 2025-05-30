@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Restorator.Desktop.Dialogs;
+using Restorator.Desktop.Models;
 using Restorator.Domain.Models.Restaurant;
 using Restorator.Domain.Services;
 using Wpf.Ui;
@@ -50,11 +51,12 @@ namespace Restorator.Desktop.ViewModels
             Approved = info.Approved;
 
             foreach (var image in info.Images)
-                Images.Add(image);
+                Images.Add(new RestaurantImageDTO() { Source = image });
 
             SelectedImage = Images.FirstOrDefault();
 
-            Menu = info.Menu;
+            if (info.Menu != null)
+                Menu = new RestaurantImageDTO() { Source = info.Menu };
 
             RestaurantTags.Clear();
 
@@ -104,8 +106,8 @@ namespace Restorator.Desktop.ViewModels
                 BeginWorkTime = TimeOnly.FromDateTime(BeginWorkTime),
                 EndWorkTime = TimeOnly.FromDateTime(EndWorkTime),
                 Description = Description,
-                //Images = Images, TODO
-                //Menu = Menu,
+                Images = await GetImagesBytes(),
+                Menu = await GetMenuBytes(),
                 Tags = RestaurantTags.Select(r => r.Id)
             });
         }

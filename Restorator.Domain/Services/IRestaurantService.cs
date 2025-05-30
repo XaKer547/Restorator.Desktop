@@ -7,6 +7,7 @@ namespace Restorator.Domain.Services
 {
     public interface IRestaurantService
     {
+        Task<byte[]> GetImage(string uri);
         Task<Result<int>> CreateRestaurant(CreateRestaurantDTO model);
         Task<Result<RestaurantInfoDTO>> GetRestaurantInfo(int restaurantId);
         Task<IReadOnlyCollection<RestaurantSearchItemDTO>> SearchRestaurants(string? name, CancellationToken cancellationToken = default);

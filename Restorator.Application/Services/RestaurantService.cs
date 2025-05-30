@@ -148,5 +148,10 @@ namespace Restorator.Application.Client.Services
 
             return ownedSearchItems ?? [];
         }
+
+        public Task<byte[]> GetImage(string uri)
+        {
+            return _client.GetByteArrayAsync(uri);
+        }
     }
 }

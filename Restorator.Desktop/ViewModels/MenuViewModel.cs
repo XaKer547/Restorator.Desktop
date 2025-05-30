@@ -43,7 +43,8 @@ namespace Restorator.Desktop.ViewModels
             _contentDialogService = contentDialogService;
             _menuNavigationService = menuNavigationService;
 
-            sessionManager.UserLoggedIn += RefreshMenuState;
+            //check this shit
+            //sessionManager.UserLoggedIn += RefreshMenuState;
         }
 
 
@@ -125,7 +126,7 @@ namespace Restorator.Desktop.ViewModels
             if (_role == Roles.Admin)
             {
                 MenuItems.Add(new NavigationViewItem("Заявки", SymbolRegular.TaskListRtl20, typeof(RestaurantsVerificationPage)));
-                MenuItems.Add(new NavigationViewItem("Редактор схем", SymbolRegular.TaskListRtl20, typeof(RestaurantTemplateGeneratorPage)));
+                MenuItems.Add(new NavigationViewItem("Редактор схем", SymbolRegular.TaskListRtl20, typeof(RestaurantsTemplatePreviewPage)));
             }
 
             FooterItems.Add(new NavigationViewItem

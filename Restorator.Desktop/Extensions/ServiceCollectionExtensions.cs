@@ -43,6 +43,7 @@ namespace Restorator.Desktop.Extensions
             services.AddSingleton<Services.INavigationService, Services.NavigationService>();
             services.AddSingleton<Wpf.Ui.INavigationService, Wpf.Ui.NavigationService>();
             services.AddSingleton<IPageService, PageService>();
+            services.AddSingleton<IWindowManager, WindowManager>();
             services.AddSingleton<ISessionManager, SessionManager>();
             services.AddSingleton<IUserManager, UserManager>();
 
@@ -52,7 +53,7 @@ namespace Restorator.Desktop.Extensions
         {
             Action<IServiceProvider, HttpClient> configureClient = (provider, client) =>
             {
-                client.BaseAddress = new Uri($"https://localhost:4035");
+                client.BaseAddress = new Uri($"https://localhost:8862");
 
                 var manager = provider.GetRequiredService<ISessionManager>();
 
