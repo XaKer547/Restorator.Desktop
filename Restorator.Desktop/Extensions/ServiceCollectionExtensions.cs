@@ -94,6 +94,9 @@ namespace Restorator.Desktop.Extensions
 
             services.AddSingleton<RestaurantSearchViewModel>();
 
+            services.AddTransient<IDialog<RestaurantTemplateGeneratorViewModel>, RestaurantTemplateGeneratorWindow>();
+
+
             var manager = new DataTemplateManager().RegisterDataTemplate<AuthenticationViewModel, AuthenticationPage>()
                                                    .RegisterDataTemplate<SignInViewModel, SignInControl>()
                                                    .RegisterDataTemplate<SignUpViewModel, SignUpControl>()
@@ -108,7 +111,7 @@ namespace Restorator.Desktop.Extensions
                                                    .RegisterDataTemplate<RestaurantReservationsManagementViewModel, ReservsationsManagementPage>()
                                                    .RegisterDataTemplate<RestaurantsVerificationViewModel, RestaurantsVerificationPage>()
                                                    .RegisterDataTemplate<RestaurantVerificationViewModel, RestaurantVerificationPage>()
-                                                   .RegisterDataTemplate<RestaurantTemplateGeneratorViewModel, RestaurantTemplateGeneratorPage>()
+                                                   .RegisterDataTemplate<RestaurantTemplateGeneratorViewModel, RestaurantTemplateGeneratorWindow>()
                                                    .RegisterDataTemplate<RestaurantManagementViewModel, RestaurantManagementPage>();
 
             manager.SetControlsCulture();
