@@ -1,27 +1,27 @@
-﻿<Page x:Class="Restorator.Desktop.Views.Pages.RestaurantTemplateGeneratorPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:converters="clr-namespace:Restorator.Desktop.Converters"
-      xmlns:models="clr-namespace:Restorator.Desktop.Models"
-      xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
-      xmlns:pages="clr-namespace:Restorator.Desktop.Views.Pages"
-      d:DataContext="{d:DesignInstance Type=viewmodels:RestaurantTemplateGeneratorViewModel}"
-      mc:Ignorable="d" 
-      d:DesignHeight="1526.82" d:DesignWidth="1212.66" Margin="0,25" MinWidth="750">
-    <Page.Resources>
+﻿<Window x:Class="Restorator.Desktop.Views.Windows.RestaurantTemplateGeneratorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:Restorator.Desktop.Converters"
+        xmlns:models="clr-namespace:Restorator.Desktop.Models"
+        xmlns:viewmodels="clr-namespace:Restorator.Desktop.ViewModels"
+        xmlns:windows="clr-namespace:Restorator.Desktop.Views.Windows"
+        d:DataContext="{d:DesignInstance Type=viewmodels:RestaurantTemplateGeneratorViewModel}"
+        mc:Ignorable="d"
+        MinWidth="750"
+        d:DesignHeight="1526.82" d:DesignWidth="1212.66"
+        ResizeMode="NoResize" WindowState="Maximized" Name="dialog">
+    <Window.Resources>
         <converters:DoubleToAngleConverter x:Key="doubleAngeConverter"/>
-    </Page.Resources>
+    </Window.Resources>
 
     <DockPanel>
         <Viewbox HorizontalAlignment="Left">
             <Grid>
-                <Grid.Background>
-                    <ImageBrush ImageSource="{Binding Template.Content}"/>
-                </Grid.Background>
+                <Image Source="{Binding Template.Content}"/>
 
                 <ItemsControl ItemsSource="{Binding Tables}" IsTabStop="False">
                     <ItemsControl.ItemsPanel>
@@ -38,7 +38,7 @@
                         <DataTemplate DataType="{x:Type models:TableModel}">
                             <Button Width="{Binding Width}" Height="{Binding Height}"
                                     Style="{StaticResource TableButtonStyle}" 
-                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:RestaurantTemplateGeneratorPage}}, Path=DataContext.ChangeSelectedTableCommand}"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type windows:RestaurantTemplateGeneratorWindow}}, Path=DataContext.ChangeSelectedTableCommand}"
                                     CommandParameter="{Binding}"
                                     IsTabStop="False">
                                 <Button.LayoutTransform>
@@ -70,12 +70,16 @@
                     Value="{Binding SelectedTable.Rotation, Mode=TwoWay}"/>
 
             <DockPanel>
-                <ui:Button IsTabStop="False" Appearance="Primary" Content="+" HorizontalAlignment="Center" Margin="0,20" Command="{Binding AddNewTableCommand}"/>
-                <ui:Button IsTabStop="False" Appearance="Primary" Content="-" HorizontalAlignment="Center" Margin="0,20" Command="{Binding RemoveTableCommand}"/>
+                <ui:Button IsTabStop="False" Appearance="Primary" Content="Добавить стол" HorizontalAlignment="Center" Margin="0,20" Command="{Binding AddNewTableCommand}"/>
+                <ui:Button IsTabStop="False" Appearance="Primary" Content="Удалить выбранный стол" HorizontalAlignment="Center" Margin="0,20" Command="{Binding RemoveTableCommand}"/>
             </DockPanel>
 
             <ui:Button Appearance="Danger" Foreground="White" Content="Удалить все столы" 
                        Command="{Binding ClearSchemeCommand}"/>
+
+            <ui:Button Appearance="Success" Foreground="White" Content="Сохранить шаблон" 
+                       Margin="0,25"
+                       Command="{Binding SaveTemplateCommand}"/>
         </StackPanel>
 
         <StackPanel Margin="20,0">
@@ -85,7 +89,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:TableModel}">
                         <ui:Button Appearance="Info"
-                                   Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type pages:RestaurantTemplateGeneratorPage}},
+                                   Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type windows:RestaurantTemplateGeneratorWindow}},
                             Path=DataContext.ChangeSelectedTableTemplateCommand}"
                                    CommandParameter="{Binding }">
                             <TextBlock>
@@ -112,5 +116,9 @@
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding InitializeCommand}"/>
         </i:EventTrigger>
+
+        <i:PropertyChangedTrigger Binding="{Binding DialogResult}">
+            <i:ChangePropertyAction PropertyName="DialogResult" TargetName="dialog" Value="{Binding DialogResult}"/>
+        </i:PropertyChangedTrigger>
     </i:Interaction.Triggers>
-</Page>
+</Window>

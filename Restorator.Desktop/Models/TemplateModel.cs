@@ -2,11 +2,11 @@
 {
     public class TemplateModel
     {
-        public TemplateModel(byte[] content)
+        public TemplateModel(string path)
         {
-            Content = content;
+            Content = path;
         }
 
-        public byte[] Content { get; set; }
+        public string Content { get; set; }
     }
 }

@@ -24,11 +24,26 @@ namespace Restorator.Desktop.ViewModels
         [RelayCommand]
         private async Task Initialize()
         {
-            foreach (var template in await _templateService.GetRestaurantsTemplatePreview())
-                Templates.Add(template);
+            await LoadTemplates();
 
             Initialized = true;
         }
 
+        [RelayCommand]
+        private async Task OpenEditor()
+        {
+            var success = _windowManager.ShowWindow<RestaurantTemplateGeneratorViewModel>();
+
+            if (success)
+                await LoadTemplates();
+        }
+
+        private async Task LoadTemplates()
+        {
+            Templates.Clear();
+
+            foreach (var template in await _templateService.GetRestaurantsTemplatePreview())
+                Templates.Add(template);
+        }
     }
 }

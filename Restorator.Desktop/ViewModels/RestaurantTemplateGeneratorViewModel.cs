@@ -1,11 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using Restorator.Desktop.Extensions;
 using Restorator.Desktop.Models;
 using Restorator.Desktop.ViewModels.Abstract;
 using Restorator.Domain.Models.Templates;
 using Restorator.Domain.Services;
+using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Restorator.Desktop.ViewModels
 {
@@ -17,16 +19,11 @@ namespace Restorator.Desktop.ViewModels
             _templateService = templateService;
         }
 
-        private const string SchemeLocation =
-            "C:\\Users\\user\\source\\repos\\XaKer547\\Restorator\\Restorator.Seeder\\Resources\\RestaurantsPlan";
-
-        //тут свой путь к сидеру пиши
+        [ObservableProperty]
+        private bool? dialogResult = null;
 
         [ObservableProperty]
         private ObservableCollection<TableModel> tables = [];
-
-        [ObservableProperty]
-        private ObservableCollection<RestaurantTemplatePreview> templates = [];
 
         [ObservableProperty]
         private ObservableCollection<TableModel> tableTemplates = [];
@@ -38,17 +35,16 @@ namespace Restorator.Desktop.ViewModels
         private TableModel? selectedTable;
 
         [ObservableProperty]
-        private TemplateModel selectedTemplate;
-
-        [ObservableProperty]
-        private string seederScript;
+        private TemplateModel template;
 
         [ObservableProperty]
         private bool canChangeTable = false;
 
         [RelayCommand]
-        public async Task Initialize()
+        private async Task Initialize()
         {
+            LoadScheme();
+
             var teplates = await _templateService.GetTableTemplates();
 
             foreach (var tableTemplate in teplates)
@@ -56,21 +52,13 @@ namespace Restorator.Desktop.ViewModels
 
             SelectedTableTempate = TableTemplates[0];
 
-            var schemes = await _templateService.GetRestaurantsTemplatePreview();
-
-            foreach (var scheme in schemes)
-            {
-                Templates.Add(scheme);
-            }
-
             AddNewTable();
         }
 
-        [RelayCommand]
-        public async Task<IReadOnlyCollection<TableModel>> LoadTableTemplates()
-        {
-            await Task.Delay(1); //IDK :)
 
+        [RelayCommand]
+        private async Task<IReadOnlyCollection<TableModel>> LoadTableTemplates()
+        {
             return
             [
                 new TableModel()
@@ -143,6 +131,38 @@ namespace Restorator.Desktop.ViewModels
             SelectedTable = null;
 
             CanChangeTable = false;
+        }
+
+        [RelayCommand]
+        private async Task SaveTemplate()
+        {
+            var a = await _templateService.CreateRestaurantTemplate(new Domain.Models.Templates.CreateRestaurantTemplateDTO()
+            {
+                Tables = Tables.Select(x => new CreateRestaurantTemplateTableDTO
+                {
+                    TemplateId = x.TemplateId,
+                    X = x.X,
+                    Y = x.Y
+                }),
+                Scheme = await File.ReadAllBytesAsync(Template.Content)
+
+            });
+
+            DialogResult = true;
+        }
+
+        private void LoadScheme()
+        {
+            var dialog = new OpenFileDialog()
+            {
+                Multiselect = false,
+                Filter = "Изображения|*.jpg;*.jpeg;*.png;"
+            };
+
+            if (dialog.ShowDialog() != true)
+                DialogResult = false;
+
+            Template = new TemplateModel(dialog.FileName);
         }
 
         /*
