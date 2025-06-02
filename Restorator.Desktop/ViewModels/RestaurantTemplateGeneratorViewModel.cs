@@ -20,9 +20,6 @@ namespace Restorator.Desktop.ViewModels
         }
 
         [ObservableProperty]
-        private bool? dialogResult = null;
-
-        [ObservableProperty]
         private ObservableCollection<TableModel> tables = [];
 
         [ObservableProperty]
@@ -40,6 +37,10 @@ namespace Restorator.Desktop.ViewModels
         [ObservableProperty]
         private bool canChangeTable = false;
 
+
+        public delegate void DialogDone(bool result);
+        public event DialogDone DialogDoneEvent;
+
         [RelayCommand]
         private async Task Initialize()
         {
@@ -54,7 +55,6 @@ namespace Restorator.Desktop.ViewModels
 
             AddNewTable();
         }
-
 
         [RelayCommand]
         private async Task<IReadOnlyCollection<TableModel>> LoadTableTemplates()
@@ -148,7 +148,7 @@ namespace Restorator.Desktop.ViewModels
 
             });
 
-            DialogResult = true;
+            DialogDoneEvent.Invoke(true);
         }
 
         private void LoadScheme()
@@ -160,7 +160,7 @@ namespace Restorator.Desktop.ViewModels
             };
 
             if (dialog.ShowDialog() != true)
-                DialogResult = false;
+                DialogDoneEvent.Invoke(false);
 
             Template = new TemplateModel(dialog.FileName);
         }

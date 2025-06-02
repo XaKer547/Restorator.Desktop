@@ -11,9 +11,16 @@ namespace Restorator.Desktop.Views.Windows
     {
         public RestaurantTemplateGeneratorWindow(RestaurantTemplateGeneratorViewModel viewModel)
         {
+            viewModel.DialogDoneEvent += ViewModel_DialogDoneEvent;
+
             DataContext = viewModel;
 
             InitializeComponent();
+        }
+
+        private void ViewModel_DialogDoneEvent(bool result)
+        {
+            DialogResult = result;
         }
     }
 }

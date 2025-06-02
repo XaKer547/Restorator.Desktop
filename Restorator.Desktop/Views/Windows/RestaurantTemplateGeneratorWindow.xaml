@@ -116,9 +116,5 @@
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding InitializeCommand}"/>
         </i:EventTrigger>
-
-        <i:PropertyChangedTrigger Binding="{Binding DialogResult}">
-            <i:ChangePropertyAction PropertyName="DialogResult" TargetName="dialog" Value="{Binding DialogResult}"/>
-        </i:PropertyChangedTrigger>
     </i:Interaction.Triggers>
 </Window>
