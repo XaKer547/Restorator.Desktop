@@ -26,6 +26,21 @@ namespace Restorator.Application.Client.Services
             return await response.AsResult<int>();
         }
 
+        public async Task<Result<IReadOnlyCollection<ReservationInfoDTO>>> GetOwnedReservations(GetOwnedReservationsDTO model)
+        {
+            var builder = new StringBuilder($"/owned?selectedDate={model.SelectedDate:yyyy-MM-dd}");
+
+            if (model.RestaurantId.HasValue)
+                builder.Append($"&restaurantId={model.RestaurantId}");
+
+            if (model.SkipCanceled.HasValue)
+                builder.Append($"&skipCanceled={model.SkipCanceled}");
+
+            var reservations = await GetFromJsonAsync<IReadOnlyCollection<ReservationInfoDTO>>(builder.ToString());
+
+            return reservations.ToResultWithNullCheck();
+        }
+
         public async Task<Result<ReservationInfoDTO>> GetReservationInfo(int reservationId)
         {
             var plan = await GetFromJsonAsync<ReservationInfoDTO>($"/{reservationId}");
@@ -50,6 +65,9 @@ namespace Restorator.Application.Client.Services
 
             return reservations.ToResultWithNullCheck();
         }
+
+
+
 
         public async Task<Result<RestaurantPlanDTO>> GetRestaurantReservationPlan(GetRestaurantPlanDTO model)
         {

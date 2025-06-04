@@ -11,5 +11,6 @@ namespace Restorator.Domain.Services
         Task<Result> CancelReservation(int reservationId);
         Task<Result<ReservationInfoDTO>> GetReservationInfo(int reservationId);
         Task<Result<IReadOnlyCollection<ReservationInfoDTO>>> GetReservations(GetReservationsDTO model);
+        Task<Result<IReadOnlyCollection<ReservationInfoDTO>>> GetOwnedReservations(GetOwnedReservationsDTO model);
     }
 }

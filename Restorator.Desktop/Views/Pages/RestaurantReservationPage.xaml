@@ -151,11 +151,6 @@
                                 <ui:TextBlock Text="{Binding ReservationInfo.ReservationEnd}" FontTypography="Subtitle" FontWeight="Normal"/>
                             </DockPanel>
                         </StackPanel>
-
-                        <DockPanel Margin="0,10">
-                            <ui:TextBlock Text="Владелец брониррования: " FontTypography="Subtitle"/>
-                            <ui:TextBlock Text="{Binding ReservationInfo.Username}" FontTypography="Subtitle" FontWeight="Normal"/>
-                        </DockPanel>
                     </StackPanel>
                 </GroupBox>
 

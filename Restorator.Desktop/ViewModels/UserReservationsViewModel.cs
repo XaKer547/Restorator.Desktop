@@ -48,7 +48,7 @@ namespace Restorator.Desktop.ViewModels
         {
             Reservations.Clear();
 
-            var result = await _reservationService.GetReservations(new GetReservationsDTO()
+            var result = await _reservationService.GetOwnedReservations(new GetOwnedReservationsDTO()
             {
                 SelectedDate = DateOnly.FromDateTime(SelectedDate),
             });
