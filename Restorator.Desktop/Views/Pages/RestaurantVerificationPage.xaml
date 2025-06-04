@@ -17,19 +17,21 @@
                         <Border Width="300" Height="75" CornerRadius="10" Background="Black" >
                             <Border CornerRadius="10">
                                 <Border.Background>
-                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding SelectedImage, TargetNullValue={StaticResource NoImage}}" Opacity="0.5"/>
+                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding SelectedImage, TargetNullValue={StaticResource NoImage}}" Opacity="0.75"/>
                                 </Border.Background>
 
                                 <Grid Margin="2.5,0">
-                                    <ui:TextBlock Text="{Binding RestaurantName}" FontTypography="Body" Foreground="White" VerticalAlignment="Bottom"/>
+                                    <ui:TextBlock Text="{Binding RestaurantName}"
+                              FontTypography="Body" Foreground="White"
+                              VerticalAlignment="Bottom"/>
 
                                     <ListBox ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage, Mode=TwoWay}" 
-                       IsSynchronizedWithCurrentItem="True"
-                       HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25"
-                       Background="Transparent">
+                         IsSynchronizedWithCurrentItem="True"
+                         HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25"
+                         Background="Transparent" IsTabStop="False">
                                         <ListBox.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal"/>
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="2"/>
                                             </ItemsPanelTemplate>
                                         </ListBox.ItemsPanel>
                                         <ListBox.Resources>
@@ -37,8 +39,9 @@
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="ListBoxItem">
-                                                            <Border Name="mainBorder" Width="30" Height="20" CornerRadius="10" BorderBrush="Transparent" BorderThickness="0.25" Opacity="0.5">
-                                                                <Border Name="imageContainer" CornerRadius="10">
+                                                            <Border Name="mainBorder" Width="20" Height="10" CornerRadius="5"
+                                                BorderBrush="Transparent" BorderThickness="0.25" Opacity="0.5">
+                                                                <Border Name="imageContainer" CornerRadius="5">
                                                                     <Border.Background>
                                                                         <ImageBrush Stretch="UniformToFill" ImageSource="{Binding }" />
                                                                     </Border.Background>

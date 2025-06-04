@@ -69,19 +69,23 @@
         <StackPanel Margin="20,0">
             <ui:TextBlock Text="Дата и время" FontTypography="Title"/>
 
-            <StackPanel Margin="25">
-                <ui:TextBlock Text="Дата бронирования"/>
+            <StackPanel Margin="25" HorizontalAlignment="Center">
+                <ui:TextBlock Text="Дата бронирования" FontSize="30"/>
 
-                <ui:CalendarDatePicker Name="calendarPicker" Date="{Binding SelectedDate, Mode=TwoWay}" IsTodayHighlighted="True">
+                <ui:CalendarDatePicker Name="calendarPicker" Date="{Binding SelectedDate, Mode=TwoWay}" IsTodayHighlighted="True"
+                                       HorizontalAlignment="Center">
                     <ui:CalendarDatePicker.Resources>
                         <Style TargetType="Calendar" BasedOn="{StaticResource DefaultCalendarStyle}">
                             <Setter Property="DisplayDateStart" Value="{x:Static sys:DateTime.Today}"/>
                         </Style>
+                        <Style TargetType="ui:SymbolIcon">
+                            <Setter Property="FontSize" Value="30"/>
+                        </Style>
                     </ui:CalendarDatePicker.Resources>
                     <DockPanel>
-                        <ui:TextBlock Text="{Binding SelectedDate, StringFormat=m}"/>
+                        <ui:TextBlock Text="{Binding SelectedDate, StringFormat=m}" FontSize="20"/>
 
-                        <ui:TextBlock Text=" (Сегодня)">
+                        <ui:TextBlock Text=" (Сегодня)" FontSize="20">
                             <i:Interaction.Triggers>
                                 <i:DataTrigger Binding="{Binding IsToday}" Value="False">
                                     <i:ChangePropertyAction PropertyName="Visibility" Value="Collapsed"/>
@@ -100,7 +104,8 @@
                     <ui:TextBlock Text="С:" Width="75" VerticalAlignment="Center" FontTypography="Title"/>
 
                     <StackPanel>
-                        <ui:TextBlock Text="{Binding ReservationStartTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"/>
+                        <ui:TextBlock Text="{Binding ReservationStartTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"
+                                       FontSize="15"/>
                         <controls:TimePicker SelectedDateTime="{Binding ReservationStartTime}">
                             <controls:TimePicker.SourceHours>
                                 <MultiBinding Converter="{StaticResource dateTimeToHoursLimitConverter}" UpdateSourceTrigger="PropertyChanged">
@@ -112,10 +117,11 @@
                     </StackPanel>
                 </DockPanel>
 
-                <DockPanel Grid.Column="1">
+                <DockPanel>
                     <ui:TextBlock Text="ДО:" Width="75" VerticalAlignment="Center" FontTypography="Title"/>
                     <StackPanel>
-                        <ui:TextBlock Text="{Binding ReservationEndTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"/>
+                        <ui:TextBlock Text="{Binding ReservationEndTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"
+                                          FontSize="15"/>
                         <controls:TimePicker SelectedDateTime="{Binding ReservationEndTime}">
                             <controls:TimePicker.SourceHours>
                                 <MultiBinding Converter="{StaticResource dateTimeToHoursLimitConverter}" ConverterParameter="{StaticResource hourSpace}" UpdateSourceTrigger="PropertyChanged">
@@ -126,10 +132,12 @@
                         </controls:TimePicker>
                     </StackPanel>
                 </DockPanel>
+
+                <ui:Button  HorizontalAlignment="Center" Margin="0,20" FontSize="50"
+                            Command="{Binding ConfirmTableReservationCommand}">
+                    <ui:TextBlock Text="Перейти к оформлению" FontSize="30"/>
+                </ui:Button>
             </StackPanel>
-
-            <Button Grid.Row="2" Content="Перейти к оформлению" HorizontalAlignment="Center" Margin="0,20" Command="{Binding ConfirmTableReservationCommand}"/>
-
 
 
             <Border BorderBrush="Blue" BorderThickness="0.5" CornerRadius="15"

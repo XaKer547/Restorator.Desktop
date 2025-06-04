@@ -75,7 +75,7 @@ namespace Restorator.Desktop.ViewModels
             RestaurantName = info.Name;
             Description = info.Description;
 
-            foreach (var image in Images)
+            foreach (var image in info.Images)
                 Images.Add(image);
 
             SelectedImage = Images.FirstOrDefault();
