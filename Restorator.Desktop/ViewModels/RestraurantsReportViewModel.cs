@@ -159,9 +159,15 @@ namespace Restorator.Desktop.ViewModels
         async partial void OnSelectedRestaurantChanged(RestaurantSearchItemDTO value)
         {
             if (SelectedRestaurant is null)
+            {
                 selectedRestaurantId = null;
+                ShowingSummary = true;
+            }
             else
+            {
                 selectedRestaurantId = SelectedRestaurant.Id;
+                ShowingSummary = false;
+            }
 
             await LoadMonthStatistics();
         }
