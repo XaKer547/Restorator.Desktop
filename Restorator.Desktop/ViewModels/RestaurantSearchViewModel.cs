@@ -109,6 +109,8 @@ namespace Restorator.Desktop.ViewModels
 
             RestaurantsTag = await _restaurantService.GetRestaurantsTags();
 
+            RestaurantsPreview.Clear();
+
             await SearchRestaurants();
 
             Initialized = true;
@@ -217,7 +219,7 @@ namespace Restorator.Desktop.ViewModels
 
             //_currentPage++;
 
-            //CanLoadRestaurants = restaurants.HasNextPage;
+            CanLoadRestaurants = false;
 
             foreach (var restaurant in restaurants)
                 RestaurantsPreview.Add(restaurant);
