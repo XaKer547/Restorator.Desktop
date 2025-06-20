@@ -69,7 +69,8 @@ namespace Restorator.Application.Client.Services
         {
             var pagintaion = model.PaginationFilter;
 
-            var builder = new StringBuilder($"?PageSize={pagintaion.PageSize}&CurrentPage={pagintaion.CurrentPage}");
+            var builder = new StringBuilder($"?PageSize={100}&CurrentPage={pagintaion.CurrentPage}"); //fuck me
+            //var builder = new StringBuilder($"?PageSize={pagintaion.PageSize}&CurrentPage={pagintaion.CurrentPage}");
 
             var filter = model.Filter;
 

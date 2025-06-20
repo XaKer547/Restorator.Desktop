@@ -13,6 +13,7 @@ namespace Restorator.Desktop.ViewModels
     {
         private readonly IRestaurantService _restaurantService;
         private readonly ISnackbarService _snackbarService;
+        private readonly Services.INavigationService _navigationService;
         public CreateRestaurantViewModel(IRestaurantService restaurantService,
                                          Services.INavigationService navigationService,
                                          ISessionManager sessionManager,
@@ -21,6 +22,7 @@ namespace Restorator.Desktop.ViewModels
         {
             _restaurantService = restaurantService;
             _snackbarService = snackbarService;
+            _navigationService = navigationService;
         }
 
         [ObservableProperty]
@@ -43,17 +45,21 @@ namespace Restorator.Desktop.ViewModels
                 return;
             }
 
-            var result = await _restaurantService.CreateRestaurant(new CreateRestaurantDTO
+            var model = new CreateRestaurantDTO
             {
                 Name = RestaurantName,
                 BeginWorkTime = TimeOnly.FromDateTime(BeginWorkTime),
                 EndWorkTime = TimeOnly.FromDateTime(EndWorkTime),
                 Description = Description,
                 Images = await GetImagesBytes(),
-                Menu = await GetMenuBytes(),
+                Menu = Menu is null ? null : await GetMenuBytes(),
                 Tags = RestaurantTags.Select(r => r.Id),
                 TemplateId = SelectedTemplate.Id,
-            });
+            };
+
+            var result = await _restaurantService.CreateRestaurant(model);
+
+            await _navigationService.NavigateBackAsync();
         }
 
         [RelayCommand]
