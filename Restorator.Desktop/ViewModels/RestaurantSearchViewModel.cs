@@ -130,6 +130,7 @@ namespace Restorator.Desktop.ViewModels
             SelectedTag = restaurantTag;
 
             CanResetTag = true;
+            IsEmptyLatest = false;
 
             await ResetSearch();
         }
