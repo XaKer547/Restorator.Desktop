@@ -184,6 +184,8 @@ namespace Restorator.Desktop.ViewModels
             if (showedLatest)
                 return;
 
+            SelectedTag = null;
+
             RestaurantsPreview.Clear();
 
             Searching = true;
