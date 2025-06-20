@@ -98,7 +98,7 @@ namespace Restorator.Desktop.ViewModels
         private int _currentPage;
         private bool CanLoadRestaurants { get; set; }
 
-        [RelayCommand(CanExecute = nameof(CanInitialize))]
+        [RelayCommand]
         public async Task InitializeViewModel()
         {
             SelectedTag = null;
@@ -211,13 +211,13 @@ namespace Restorator.Desktop.ViewModels
                 PaginationFilter = new PaginationFilter()
                 {
                     CurrentPage = _currentPage,
-                    PageSize = 10 //Power check?
+                    PageSize = 100 //Power check?
                 }
             });
 
-            _currentPage++;
+            //_currentPage++;
 
-            CanLoadRestaurants = restaurants.HasNextPage;
+            //CanLoadRestaurants = restaurants.HasNextPage;
 
             foreach (var restaurant in restaurants)
                 RestaurantsPreview.Add(restaurant);
