@@ -50,7 +50,8 @@ namespace Restorator.Application.Client.Services
         {
             var info = await GetFromJsonAsync<RestaurantInfoDTO>($"/{restaurantId}");
 
-            info.Menu = $"{_client.BaseAddress}/restaurants/{info.Name}/menu.png";
+            if (info.Menu != null)
+                info.Menu = $"{_client.BaseAddress}/restaurants/{info.Name}/menu.png";
 
             info.Images = info.Images.Select(x => $"{_client.BaseAddress}/restaurants/{info.Name}/{x}");
 

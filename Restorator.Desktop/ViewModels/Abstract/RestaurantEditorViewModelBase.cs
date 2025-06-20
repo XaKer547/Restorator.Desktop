@@ -180,12 +180,9 @@ namespace Restorator.Desktop.ViewModels
         }
 
 
-        protected Task<byte[]?> GetMenuBytes()
+        protected Task<byte[]> GetMenuBytes()
         {
-            if (Menu is null)
-                return null;
-
-            return PrepareImage(Menu)!;
+            return PrepareImage(Menu!);
         }
     }
 }

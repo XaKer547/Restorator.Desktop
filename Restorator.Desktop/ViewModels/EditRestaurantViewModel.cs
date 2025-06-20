@@ -80,7 +80,7 @@ namespace Restorator.Desktop.ViewModels
             if (result != Wpf.Ui.Controls.ContentDialogResult.Primary)
                 return;
 
-            await _restaurantService.DeleteRestaurant(_restaurantId);
+            var v = await _restaurantService.DeleteRestaurant(_restaurantId);
 
             await _navigationService.NavigateBackAsync();
         }
@@ -99,7 +99,7 @@ namespace Restorator.Desktop.ViewModels
                 return;
             }
 
-            var result = await _restaurantService.UpdateRestaurant(new UpdateRestraurantDTO
+            var model = new UpdateRestraurantDTO
             {
                 RestaurantId = _restaurantId,
                 Name = RestaurantName,
@@ -107,9 +107,11 @@ namespace Restorator.Desktop.ViewModels
                 EndWorkTime = TimeOnly.FromDateTime(EndWorkTime),
                 Description = Description,
                 Images = await GetImagesBytes(),
-                Menu = await GetMenuBytes(),
+                Menu = Menu is null ? null : await GetMenuBytes(),
                 Tags = RestaurantTags.Select(r => r.Id)
-            });
+            };
+
+            var result = await _restaurantService.UpdateRestaurant(model);
         }
     }
 }
