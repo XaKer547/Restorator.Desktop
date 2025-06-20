@@ -180,7 +180,7 @@ namespace Restorator.Desktop.ViewModels
         [RelayCommand(AllowConcurrentExecutions = false)]
         public async Task ShowLatest()
         {
-            if (!showedLatest)
+            if (showedLatest)
                 return;
 
             RestaurantsPreview.Clear();

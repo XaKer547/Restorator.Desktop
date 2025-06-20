@@ -33,7 +33,7 @@
                 <RadioButton Content="Все" Command="{Binding ResetSelectedTagCommand}" IsChecked="True" Margin="0,0,0,10"
                            Style="{StaticResource {x:Type ToggleButton}}"  GroupName="RestaurantTags"/>
 
-                <RadioButton Content="Недавно" Command="{Binding ShowLatestCommand}" IsChecked="{Binding IsShowingLatest, Mode=TwoWay}"
+                <RadioButton Content="Недавно" Command="{Binding ShowLatestCommand}" IsChecked="{Binding IsShowingLatest, Mode=OneWay}"
                              Visibility="{Binding IsLoggedIn, Converter={StaticResource boolToVisibilityConverter}}"
                              Margin="10,0,0,10" Style="{StaticResource {x:Type ToggleButton}}"  
                              GroupName="RestaurantTags"/>
