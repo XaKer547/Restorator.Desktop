@@ -101,19 +101,22 @@ namespace Restorator.Desktop.ViewModels
         [RelayCommand]
         public async Task InitializeViewModel()
         {
-            SelectedTag = null;
+            if (!Initialized)
+            {
+                SelectedTag = null;
 
-            _currentPage = 1;
+                _currentPage = 1;
+
+                RestaurantsTag = await _restaurantService.GetRestaurantsTags();
+
+                Initialized = true;
+            }
 
             Searching = true;
-
-            RestaurantsTag = await _restaurantService.GetRestaurantsTags();
 
             RestaurantsPreview.Clear();
 
             await SearchRestaurants();
-
-            Initialized = true;
 
             Searching = false;
         }

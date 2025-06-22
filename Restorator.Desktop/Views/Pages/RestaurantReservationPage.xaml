@@ -101,11 +101,12 @@
 
             <StackPanel Grid.Row="1" HorizontalAlignment="Center" IsEnabled="{Binding CanSearchReserve}">
                 <DockPanel Margin="0,0,0,25">
+                    <ui:TextBlock Text="{Binding ReservationStartTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center" DockPanel.Dock="Top"
+                                  FontSize="15" Margin="0,10"/>
+
                     <ui:TextBlock Text="С:" Width="75" VerticalAlignment="Center" FontTypography="Title"/>
 
                     <StackPanel>
-                        <ui:TextBlock Text="{Binding ReservationStartTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"
-                                       FontSize="15"/>
                         <controls:TimePicker SelectedDateTime="{Binding ReservationStartTime}">
                             <controls:TimePicker.SourceHours>
                                 <MultiBinding Converter="{StaticResource dateTimeToHoursLimitConverter}" UpdateSourceTrigger="PropertyChanged">
@@ -118,10 +119,11 @@
                 </DockPanel>
 
                 <DockPanel>
+                    <ui:TextBlock Text="{Binding ReservationEndTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center" DockPanel.Dock="Top"
+                                          FontSize="15"/>
+
                     <ui:TextBlock Text="ДО:" Width="75" VerticalAlignment="Center" FontTypography="Title"/>
                     <StackPanel>
-                        <ui:TextBlock Text="{Binding ReservationEndTime, StringFormat=m}" FontTypography="Caption" HorizontalAlignment="Center"
-                                          FontSize="15"/>
                         <controls:TimePicker SelectedDateTime="{Binding ReservationEndTime}">
                             <controls:TimePicker.SourceHours>
                                 <MultiBinding Converter="{StaticResource dateTimeToHoursLimitConverter}" ConverterParameter="{StaticResource hourSpace}" UpdateSourceTrigger="PropertyChanged">
