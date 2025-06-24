@@ -14,14 +14,14 @@ namespace Restorator.Application.Client.Services
 
         public async Task<Result<int>> CreateRestaurantTemplate(CreateRestaurantTemplateDTO model)
         {
-            var response = await PostAsJsonAsync("/table", model);
+            var response = await PostAsJsonAsync("/restaurant", model);
 
             return await response.AsResult<int>();
         }
 
         public async Task<Result<int>> CreateTableTemplate(CreateTableTempateDTO model)
         {
-            var response = await PostAsJsonAsync("/restaurant", model);
+            var response = await PostAsJsonAsync("/table", model);
 
             return await response.AsResult<int>();
         }
