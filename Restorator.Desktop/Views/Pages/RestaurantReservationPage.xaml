@@ -70,7 +70,7 @@
             <ui:TextBlock Text="Дата и время" FontTypography="Title"/>
 
             <StackPanel Margin="25" HorizontalAlignment="Center">
-                <ui:TextBlock Text="Дата бронирования" FontSize="30"/>
+                <ui:TextBlock Text="Дата бронирования" FontSize="30" HorizontalAlignment="Center"/>
 
                 <ui:CalendarDatePicker Name="calendarPicker" Date="{Binding SelectedDate, Mode=TwoWay}" IsTodayHighlighted="True"
                                        HorizontalAlignment="Center">
